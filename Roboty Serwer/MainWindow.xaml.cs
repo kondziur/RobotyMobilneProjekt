@@ -24,6 +24,7 @@ namespace RobotyMobilne
     {
         public static string ip_addr = "";
         public static string komenda = "";
+        public static string port = "";
     }
 
     public partial class MainWindow : Window
@@ -43,6 +44,8 @@ namespace RobotyMobilne
         public void button_Click(object sender, RoutedEventArgs e)
         {
             Variables.ip_addr = textBox.Text;
+            Variables.port = textBoxPort.Text;
+
 
             Thread mThread = new Thread(new ThreadStart(ConnectAsClient));
             mThread.Start();
@@ -59,15 +62,17 @@ namespace RobotyMobilne
         //przycisk "Wyślij Komendę"
         public void button2_Click(object sender, RoutedEventArgs e)
         {
-            Variables.komenda = "[" + textBox1.Text + "]";
+            Variables.komenda = textBox1.Text;
 
             //wysyłanie ramki z komendą
             stream = client.GetStream();
             Byte[] data = System.Text.Encoding.ASCII.GetBytes(Variables.komenda);
             stream.Write(data, 0, data.Length);
+            Console.WriteLine(Variables.komenda);
+            Console.WriteLine(data[1]);
 
             //odbiór ramki zwrotnej
-            data = new Byte[28];
+            data = new Byte[141];
             String responseData = String.Empty;
             Int32 bytes = stream.Read(data, 0, data.Length);
             responseData = System.Text.Encoding.ASCII.GetString(data, 0, bytes);
@@ -75,14 +80,7 @@ namespace RobotyMobilne
             //wyświetlanie ramki zwrotnej
             textBoxResp.Text = responseData;
 
-            textBoxStat.Text = int.Parse(responseData.Substring(1, 2), System.Globalization.NumberStyles.HexNumber).ToString();
-            //bateria jest litle Endian
-            textBoxBat.Text = int.Parse(responseData.Substring(5, 2) + responseData.Substring(3, 2), System.Globalization.NumberStyles.HexNumber).ToString();
-            textBoxS1.Text = int.Parse(responseData.Substring(7, 4), System.Globalization.NumberStyles.HexNumber).ToString();
-            textBoxS2.Text = int.Parse(responseData.Substring(11, 4), System.Globalization.NumberStyles.HexNumber).ToString();
-            textBoxS3.Text = int.Parse(responseData.Substring(15, 4), System.Globalization.NumberStyles.HexNumber).ToString();
-            textBoxS4.Text = int.Parse(responseData.Substring(19, 4), System.Globalization.NumberStyles.HexNumber).ToString();
-            textBoxS5.Text = int.Parse(responseData.Substring(23, 4), System.Globalization.NumberStyles.HexNumber).ToString();
+          
 
         }
 
@@ -90,7 +88,7 @@ namespace RobotyMobilne
         //metoda wywoływana w metodzie "połącz'
         public void ConnectAsClient()
         {
-            client.Connect(IPAddress.Parse(Variables.ip_addr), 8000);
+            client.Connect(IPAddress.Parse(Variables.ip_addr), 50131);
         }
 
 
@@ -103,4 +101,4 @@ namespace RobotyMobilne
 
     }
 }
-//huj kurwa
+
