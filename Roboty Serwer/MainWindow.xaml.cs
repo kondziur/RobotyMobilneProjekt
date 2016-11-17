@@ -45,7 +45,7 @@ namespace RobotyMobilne
         public void button_Click(object sender, RoutedEventArgs e)
         {
             Variables.ip_addr = textBox.Text;
-            Variables.port = Convert.ToInt16(textBoxPort.Text);
+            Variables.port = Convert.ToInt32(textBoxPort.Text);
 
             Thread mThread = new Thread(new ThreadStart(ConnectAsClient));
             mThread.Start();
@@ -72,16 +72,17 @@ namespace RobotyMobilne
         //przycisk "Wyślij Komendę"
         public void button2_Click(object sender, RoutedEventArgs e)
         {
-            try
+            //try
             {
                 string komenda = textBox1.Text;
+                
                 SendCommand(komenda);
             }
-            catch (Exception ex)
-            {
+            //catch (Exception ex)
+            //{
 
-                MessageBox.Show(ex.Message);
-            }
+            //    MessageBox.Show(ex.Message);
+            //}
         }
 
 
@@ -123,6 +124,7 @@ namespace RobotyMobilne
             // strzałka w górę
             if (a.Key == Key.Up)
             {
+
                 SendCommand("001010");
                 Console.WriteLine("góra");
             }
