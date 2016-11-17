@@ -17,14 +17,15 @@ using System.Net;
 using System.IO;
 using System.Threading;
 
+
+
 namespace RobotyMobilne
 {
     //ogólnodostępne zmienne
     public class Variables
     {
         public static string ip_addr = "";
-        public static string komenda = "";
-        public static string port = "";
+        public static int port;
     }
 
     public partial class MainWindow : Window
@@ -44,8 +45,7 @@ namespace RobotyMobilne
         public void button_Click(object sender, RoutedEventArgs e)
         {
             Variables.ip_addr = textBox.Text;
-            Variables.port = textBoxPort.Text;
-
+            Variables.port = Convert.ToInt16(textBoxPort.Text);
 
             Thread mThread = new Thread(new ThreadStart(ConnectAsClient));
             mThread.Start();
@@ -55,21 +55,57 @@ namespace RobotyMobilne
         //przycisk "Rozłącz"
         private void button1_Click(object sender, RoutedEventArgs e)
         {
-            DisconnectAsClient();
+            try
+            {
+                stream.Close();
+                client.Close();
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.Message);
+            }
+
         }
 
 
         //przycisk "Wyślij Komendę"
         public void button2_Click(object sender, RoutedEventArgs e)
         {
-            Variables.komenda = textBox1.Text;
+            try
+            {
+                string komenda = textBox1.Text;
+                SendCommand(komenda);
+            }
+            catch (Exception ex)
+            {
 
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+
+        //metoda wywoływana w metodzie "połącz'
+        public void ConnectAsClient()
+        {
+            try
+            {
+                client.Connect(IPAddress.Parse(Variables.ip_addr), Variables.port);
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        //metoda która wysyła ramkę i odbiera odpowieź, argumentem jest komenda
+        private void SendCommand(string komenda)
+        {
             //wysyłanie ramki z komendą
             stream = client.GetStream();
-            Byte[] data = System.Text.Encoding.ASCII.GetBytes(Variables.komenda);
+            Byte[] data = System.Text.Encoding.ASCII.GetBytes(komenda);
             stream.Write(data, 0, data.Length);
-            Console.WriteLine(Variables.komenda);
-            Console.WriteLine(data[1]);
 
             //odbiór ramki zwrotnej
             data = new Byte[141];
@@ -79,26 +115,18 @@ namespace RobotyMobilne
 
             //wyświetlanie ramki zwrotnej
             textBoxResp.Text = responseData;
+        }
+            
 
+        private void Window_KeyDown(object sender, KeyEventArgs a)
+        {
+            // strzałka w górę
+            if (a.Key == Key.Up)
+            {
+                SendCommand("001010");
+                Console.WriteLine("góra");
+            }
           
-
         }
-
-
-        //metoda wywoływana w metodzie "połącz'
-        public void ConnectAsClient()
-        {
-            client.Connect(IPAddress.Parse(Variables.ip_addr), 50131);
-        }
-
-
-        //metoda kończąca połączenie z klientem
-        private void DisconnectAsClient()
-        {
-            stream.Close();
-            client.Close();
-        }
-
     }
 }
-
