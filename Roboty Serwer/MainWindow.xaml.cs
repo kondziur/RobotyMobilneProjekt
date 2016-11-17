@@ -45,7 +45,8 @@ namespace RobotyMobilne
         public void button_Click(object sender, RoutedEventArgs e)
         {
             Variables.ip_addr = textBox.Text;
-            Variables.port = Convert.ToInt16(textBoxPort.Text);
+            Variables.port = 50131;
+                //Convert.ToInt16(textBoxPort.Text);
 
             Thread mThread = new Thread(new ThreadStart(ConnectAsClient));
             mThread.Start();
