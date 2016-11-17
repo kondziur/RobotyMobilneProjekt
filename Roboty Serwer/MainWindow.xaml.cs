@@ -105,7 +105,12 @@ namespace RobotyMobilne
         {
             //wysyłanie ramki z komendą
             stream = client.GetStream();
+
+            // to jest do poprawienia na jakieś ładniejsze 
             Byte[] data = System.Text.Encoding.ASCII.GetBytes(komenda);
+            for (Byte zamien = 0; zamien != 3; ++zamien)
+                data[zamien] -= 48;
+            Console.WriteLine(data.ToString());
             stream.Write(data, 0, data.Length);
 
             //odbiór ramki zwrotnej
