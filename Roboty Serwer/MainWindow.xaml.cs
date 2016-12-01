@@ -31,7 +31,7 @@ namespace RobotyMobilne
     public partial class MainWindow : Window
     {
         // to jest tutaj, bo jak jest w metodach, to w innych nie da się użyć
-        TcpClient client = new TcpClient();
+        TcpClient client;
         NetworkStream stream;
 
 
@@ -59,6 +59,8 @@ namespace RobotyMobilne
             {
                 stream.Close();
                 client.Close();
+                client = null;
+                
             }
             catch (Exception ex)
             {
@@ -91,7 +93,9 @@ namespace RobotyMobilne
         {
             try
             {
+                client = new TcpClient();
                 client.Connect(IPAddress.Parse(Variables.ip_addr), Variables.port);
+                Console.WriteLine("połączono z serwerem");
             }
             catch (Exception ex)
             {
@@ -103,35 +107,72 @@ namespace RobotyMobilne
         //metoda która wysyła ramkę i odbiera odpowieź, argumentem jest komenda
         private void SendCommand(string komenda)
         {
-            //wysyłanie ramki z komendą
-            stream = client.GetStream();
+            try
+            {
+                //wysyłanie ramki z komendą
+                stream = client.GetStream();
 
-            // to jest do poprawienia na jakieś ładniejsze 
-            Byte[] data = System.Text.Encoding.ASCII.GetBytes(komenda);
-            for (Byte zamien = 0; zamien != data.Length; ++zamien)
-                data[zamien] -= 48;
-            Console.WriteLine(data.ToString());
-            stream.Write(data, 0, data.Length);
+                // to jest do poprawienia na jakieś ładniejsze 
+                Byte[] data = System.Text.Encoding.ASCII.GetBytes(komenda);
+                for (Byte zamien = 0; zamien != data.Length; ++zamien)
+                    data[zamien] -= 48;
+                Console.WriteLine(data.ToString());
+                stream.Write(data, 0, data.Length);
 
-            //odbiór ramki zwrotnej
-            data = new Byte[141];
-            String responseData = String.Empty;
-            Int32 bytes = stream.Read(data, 0, data.Length);
-            //Int32 byte1 = stream.ReadByte();
-            //Int32 byte2 = stream.ReadByte();
-            //Int32 byte3 = 9;
-            //byte3 = stream.ReadByte();
-            //responseData = System.Text.Encoding.ASCII.GetString(data, 0, bytes);
+                //odbiór ramki zwrotnej
+                data = new Byte[141];
+                String responseData = String.Empty;
+                Int32 bytes = stream.Read(data, 0, data.Length);
+                //Int32 byte1 = stream.ReadByte();
+                //Int32 byte2 = stream.ReadByte();
+                //Int32 byte3 = 9;
+                //byte3 = stream.ReadByte();
+                //responseData = System.Text.Encoding.ASCII.GetString(data, 0, bytes);
+
+                //wyświetlanie ramki zwrotnej
+
+                for (int i = 0; i < data.Length; i++)
+                {
+                    responseData = responseData + data[i].ToString();
+                }
+
+                responseData = responseData.TrimEnd('0');
+
+                if ( responseData.Length > 3 )
+                {
+                    if ( responseData[0] == 4 )
+                    {
+                        for (int i = 0; i < responseData.Length / 14; i++)
+                        {
+                            try
+                            {
+                                textBox_PosX.Text = (BitConverter.ToSingle(data, i * 14 + 3)).ToString();
+                                textBox_PosY.Text = (BitConverter.ToSingle(data, i * 14 + 7)).ToString();
+                                textBox_AngZ.Text = (BitConverter.ToSingle(data, i * 14 + 11)).ToString();
+                            }
+                            catch (Exception)
+                            {
+                                break;
+                                
+                            }
+                        }
+                    }
+                }
+
+                //Console.WriteLine(responseData[0] + ",  "+ ( responseData.Length ).ToString() );
+                textBoxResp.Text = responseData;
+
+                //textBoxResp.Text = byte1.ToString() + byte2.ToString() + byte3.ToString();
+
+                
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("serwer rozłączony");
+                throw;
+            }
             
-            //wyświetlanie ramki zwrotnej
-            //for (int i = 0; i < data.Length; i++)
-            //    {
-            //        responseData = responseData + data[i].ToString();
-            //    }
-
-            //textBoxResp.Text = responseData;
-
-            //textBoxResp.Text = byte1.ToString() + byte2.ToString() + byte3.ToString();
+                
         }
             
 
