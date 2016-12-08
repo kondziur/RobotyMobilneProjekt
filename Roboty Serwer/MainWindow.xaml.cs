@@ -115,19 +115,35 @@ namespace RobotyMobilne
                 // to jest do poprawienia na jakieś ładniejsze 
                 Byte[] data = System.Text.Encoding.ASCII.GetBytes(komenda);
                 for (Byte zamien = 0; zamien != data.Length; ++zamien)
+                {
                     data[zamien] -= 48;
+                } 
+
                 Console.WriteLine(data.ToString());
                 stream.Write(data, 0, data.Length);
+                String responseData = String.Empty;
+
+                if (komenda == "120")
+                {
+                    data = new Byte[2];
+                    //Int32 bytes = stream.Read(data, 0, data.Length);
+                    data[0] = (byte)stream.ReadByte();
+                    data[1] = (byte)stream.ReadByte();
+                }
+                else if (komenda == "3")
+                {
+                    data = new Byte[141];
+                    //Int32 bytes = stream.Read(data, 0, data.Length);
+
+                    for (int i = 0; i < data.Length; i++)
+                    {
+                        data[i] = (byte)stream.ReadByte();
+                    }
+
+                }
 
                 //odbiór ramki zwrotnej
-                data = new Byte[141];
-                String responseData = String.Empty;
-                Int32 bytes = stream.Read(data, 0, data.Length);
-                //Int32 byte1 = stream.ReadByte();
-                //Int32 byte2 = stream.ReadByte();
-                //Int32 byte3 = 9;
-                //byte3 = stream.ReadByte();
-                //responseData = System.Text.Encoding.ASCII.GetString(data, 0, bytes);
+                
 
                 //wyświetlanie ramki zwrotnej
 
@@ -135,8 +151,7 @@ namespace RobotyMobilne
                 {
                     responseData = responseData + data[i].ToString();
                 }
-
-                responseData = responseData.TrimEnd('0');
+                               
 
                 if ( responseData.Length > 3 )
                 {
