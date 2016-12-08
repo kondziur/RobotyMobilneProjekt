@@ -155,22 +155,32 @@ namespace RobotyMobilne
 
                 if ( responseData.Length > 3 )
                 {
-                    if ( responseData[0] == 4 )
+                    if ( responseData[0] == '4' )
                     {
-                        for (int i = 0; i < responseData.Length / 14; i++)
+                        for (int i = 0; i < 6; i++)
                         {
-                            try
-                            {
-                                textBox_PosX.Text = (BitConverter.ToSingle(data, i * 14 + 3)).ToString();
-                                textBox_PosY.Text = (BitConverter.ToSingle(data, i * 14 + 7)).ToString();
-                                textBox_AngZ.Text = (BitConverter.ToSingle(data, i * 14 + 11)).ToString();
-                            }
-                            catch (Exception)
-                            {
-                                break;
-                                
-                            }
+                            id1.Text = Math.Round((BitConverter.ToSingle(data, 2 + 14 * i - 1))).ToString();
+                            PosX.Text = (BitConverter.ToSingle(data, 2 + 14 * i + 1)).ToString();
+                            textBox_PosY.Text = (BitConverter.ToSingle(data, 2 + 14 * i + 5)).ToString();
+                            textBox_AngZ.Text = (BitConverter.ToSingle(data, 2 + 14 * i + 9)).ToString();
                         }
+                        //for (int i = 0; i < responseData.Length / 14; i++)
+                        //{
+                            //textBox_PosX.Text = (BitConverter.ToSingle(data, i * 14 + 3)).ToString();
+                            
+                            //try
+                            //{
+                                
+                            //    textBox_PosX.Text = (BitConverter.ToSingle(data, i * 14 + 3)).ToString();
+                            //    textBox_PosY.Text = (BitConverter.ToSingle(data, i * 14 + 7)).ToString();
+                            //    textBox_AngZ.Text = (BitConverter.ToSingle(data, i * 14 + 11)).ToString();
+                            //}
+                            //catch (Exception)
+                            //{
+                            //    break;
+                                
+                            //}
+                        //}
                     }
                 }
 
@@ -202,6 +212,22 @@ namespace RobotyMobilne
             }
           
         }
+
+        private void btnMonitor_Click(object sender, RoutedEventArgs e)
+        {
+            string komenda = "120";
+
+            SendCommand(komenda);
+        }
+
+        private void btnLocation_Click(object sender, RoutedEventArgs e)
+        {
+            string komenda = "3";
+
+            SendCommand(komenda);
+        }
+
+        
 
         
     }
