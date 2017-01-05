@@ -6,13 +6,13 @@
         xmlns:local="clr-namespace:RobotyMobilne"
         mc:Ignorable="d"
         Title="Nawiązywanie Połączenia" Height="664.938" Width="906.922" ResizeMode="NoResize">
-    <Grid Margin="0,0,-0.2,-19.4">
+    <Grid Margin="0,0,-0.2,-19.4" KeyDown="Window_KeyDown">
         <Label x:Name="label" Content="Adres IP" HorizontalAlignment="Left" Margin="19,21,0,0" VerticalAlignment="Top"/>
         <Button x:Name="button" Content="Połącz" HorizontalAlignment="Left" Margin="19,110,0,0" VerticalAlignment="Top" Width="75" Click="button_Click"/>
         <Button x:Name="button1" Content="Rozłącz" HorizontalAlignment="Left" Margin="107,110,0,0" VerticalAlignment="Top" Width="75" Click="button1_Click"/>
         <Button x:Name="button2" Content="Wyślij" HorizontalAlignment="Left" Margin="218,110,0,0" VerticalAlignment="Top" Width="75" Click="button2_Click"/>
         <Label x:Name="label1" Content="Komenda" HorizontalAlignment="Left" Margin="19,60,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="22" Margin="106,26,0,0" TextWrapping="Wrap" Text="192.168.2.102" VerticalAlignment="Top" Width="186"/>
+        <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="22" Margin="106,26,0,0" TextWrapping="Wrap" Text="192.168.2.104" VerticalAlignment="Top" Width="186"/>
         <TextBox x:Name="textBox1" HorizontalAlignment="Left" Height="22" Margin="106,65,0,0" TextWrapping="Wrap" Text="120" VerticalAlignment="Top" Width="186"/>
         <TextBox x:Name="textBoxResp" HorizontalAlignment="Left" Height="90" Margin="105,178,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="768"/>
         <Label x:Name="label2" Content="Odpowiedź:" HorizontalAlignment="Left" Height="30" Margin="19,173,0,0" VerticalAlignment="Top" Width="75"/>
@@ -21,29 +21,37 @@
         <TextBox x:Name="PosY1" HorizontalAlignment="Left" Height="23" Margin="376,323,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <TextBox x:Name="PosX1" HorizontalAlignment="Left" Height="23" Margin="227,323,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <TextBox x:Name="AngZ1" HorizontalAlignment="Left" Height="23" Margin="535,323,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <Button x:Name="btnMonitor" Content="Monitor" HorizontalAlignment="Left" Margin="520,110,0,0" VerticalAlignment="Top" Width="75" Click="btnMonitor_Click"/>
-        <Button x:Name="btnLocation" Content="Położenie" HorizontalAlignment="Left" Margin="634,110,0,0" VerticalAlignment="Top" Width="75" Click="btnLocation_Click"/>
+        <Button x:Name="btnMonitor" Content="Monitor" HorizontalAlignment="Left" Margin="647,68,0,0" VerticalAlignment="Top" Width="75" Click="btnMonitor_Click"/>
+        <Button x:Name="btnLocation" Content="Położenie" HorizontalAlignment="Left" Margin="801,68,0,0" VerticalAlignment="Top" Width="75" Click="btnLocation_Click"/>
         <TextBox x:Name="PosY2" HorizontalAlignment="Left" Height="23" Margin="376,364,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <TextBox x:Name="PosX2" HorizontalAlignment="Left" Height="23" Margin="227,364,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <TextBox x:Name="AngZ2" HorizontalAlignment="Left" Height="23" Margin="535,364,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <TextBox x:Name="PosY3" HorizontalAlignment="Left" Height="23" Margin="376,407,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <TextBox x:Name="PosX3" HorizontalAlignment="Left" Height="23" Margin="227,407,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <TextBox x:Name="AngZ3" HorizontalAlignment="Left" Height="23" Margin="535,407,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="PosY4" HorizontalAlignment="Left" Height="23" Margin="376,454,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="PosX4" HorizontalAlignment="Left" Height="23" Margin="227,454,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="AngZ4" HorizontalAlignment="Left" Height="23" Margin="535,454,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="PosY5" HorizontalAlignment="Left" Height="23" Margin="376,495,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="PosX5" HorizontalAlignment="Left" Height="23" Margin="227,495,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="AngZ5" HorizontalAlignment="Left" Height="23" Margin="535,495,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="PosY6" HorizontalAlignment="Left" Height="23" Margin="376,538,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="PosX6" HorizontalAlignment="Left" Height="23" Margin="227,538,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="AngZ6" HorizontalAlignment="Left" Height="23" Margin="535,538,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="PosY4" HorizontalAlignment="Left" Height="23" Margin="376,453,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="PosX4" HorizontalAlignment="Left" Height="23" Margin="227,453,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="AngZ4" HorizontalAlignment="Left" Height="23" Margin="535,453,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="PosY5" HorizontalAlignment="Left" Height="23" Margin="376,494,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="PosX5" HorizontalAlignment="Left" Height="23" Margin="227,494,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="AngZ5" HorizontalAlignment="Left" Height="23" Margin="535,494,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="PosY6" HorizontalAlignment="Left" Height="23" Margin="376,536,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="PosX6" HorizontalAlignment="Left" Height="23" Margin="227,536,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="AngZ6" HorizontalAlignment="Left" Height="23" Margin="535,536,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <TextBox x:Name="id1" HorizontalAlignment="Left" Height="23" Margin="117,323,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="64"/>
         <TextBox x:Name="id2" HorizontalAlignment="Left" Height="23" Margin="117,364,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="64"/>
         <TextBox x:Name="id3" HorizontalAlignment="Left" Height="23" Margin="117,407,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="64"/>
-        <TextBox x:Name="id4" HorizontalAlignment="Left" Height="23" Margin="117,454,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="64"/>
-        <TextBox x:Name="id5" HorizontalAlignment="Left" Height="23" Margin="117,495,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="64"/>
-        <TextBox x:Name="id6" HorizontalAlignment="Left" Height="23" Margin="117,538,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="64"/>
+        <TextBox x:Name="id4" HorizontalAlignment="Left" Height="23" Margin="117,453,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="64"/>
+        <TextBox x:Name="id5" HorizontalAlignment="Left" Height="23" Margin="117,494,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="64"/>
+        <TextBox x:Name="id6" HorizontalAlignment="Left" Height="23" Margin="117,536,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="64"/>
+        <Label Content="ID" HorizontalAlignment="Left" Height="28" Margin="137,290,0,0" VerticalAlignment="Top" Width="24"/>
+        <Label Content="POS X" HorizontalAlignment="Left" Height="28" Margin="266,290,0,0" VerticalAlignment="Top" Width="47"/>
+        <Label Content="POS Y" HorizontalAlignment="Left" Height="28" Margin="403,290,0,0" VerticalAlignment="Top" Width="44"/>
+        <Label Content="ANG Z" HorizontalAlignment="Left" Height="28" Margin="567,290,0,0" VerticalAlignment="Top" Width="43"/>
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="285" Margin="105,290,0,0" VerticalAlignment="Top" Width="565"/>
+        <Button x:Name="btnControl" Content="Sterowanie" HorizontalAlignment="Left" Margin="647,110,0,0" VerticalAlignment="Top" Width="75" Click="btnControl_Click"/>
+        <TextBox x:Name="textBoxNumber" HorizontalAlignment="Left" Height="23" Margin="837,111,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="39"/>
+        <Label Content="Liczba robotów" HorizontalAlignment="Left" Height="25" Margin="740,107,0,0" VerticalAlignment="Top" Width="97"/>
 
     </Grid>
 </Window>

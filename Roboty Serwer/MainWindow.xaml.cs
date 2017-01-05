@@ -49,6 +49,7 @@ namespace RobotyMobilne
 
             Thread mThread = new Thread(new ThreadStart(ConnectAsClient));
             mThread.Start();
+            textBoxResp.Text = "połączono"; 
         }
 
 
@@ -57,10 +58,27 @@ namespace RobotyMobilne
         {
             try
             {
+                SendCommand("0");
                 stream.Close();
                 client.Close();
                 client = null;
-                
+
+
+                for (int i = 0; i < 6; i++)
+                {
+                    var id = (TextBox)this.FindName("id" + (i + 1).ToString());
+                    var PosX = (TextBox)this.FindName("PosX" + (i + 1).ToString());
+                    var PosY = (TextBox)this.FindName("PosY" + (i + 1).ToString());
+                    var AngZ = (TextBox)this.FindName("AngZ" + (i + 1).ToString());
+
+
+
+                    id.Text = "";
+                    PosX.Text = "";
+                    PosY.Text = "";
+                    AngZ.Text = "";
+                }
+                textBoxResp.Text = "rozłączono";          
             }
             catch (Exception ex)
             {
@@ -141,9 +159,21 @@ namespace RobotyMobilne
                     }
 
                 }
+                else if (komenda[0] == '1' && komenda[1] == '1')
+                {
+                    int x = 2 + Convert.ToInt16(textBoxNumber.Text);
+                    data = new Byte[x];
+                    //Int32 bytes = stream.Read(data, 0, data.Length);
 
-                //odbiór ramki zwrotnej
+                    for (int i = 0; i < data.Length; i++)
+                    {
+                        data[i] = (byte)stream.ReadByte();
+                    }
+
+                }
+
                 
+                //odbiór ramki zwrotnej
 
                 //wyświetlanie ramki zwrotnej
 
@@ -159,41 +189,37 @@ namespace RobotyMobilne
                     {
                         for (int i = 0; i < 6; i++)
                         {
-                            id1.Text = Math.Round((BitConverter.ToSingle(data, 2 + 14 * i - 1))).ToString();
-                            PosX.Text = (BitConverter.ToSingle(data, 2 + 14 * i + 1)).ToString();
-                            textBox_PosY.Text = (BitConverter.ToSingle(data, 2 + 14 * i + 5)).ToString();
-                            textBox_AngZ.Text = (BitConverter.ToSingle(data, 2 + 14 * i + 9)).ToString();
-                        }
-                        //for (int i = 0; i < responseData.Length / 14; i++)
-                        //{
-                            //textBox_PosX.Text = (BitConverter.ToSingle(data, i * 14 + 3)).ToString();
+                            var id = (TextBox)this.FindName("id" + (i + 1).ToString());
+                            var PosX = (TextBox)this.FindName("PosX" + (i + 1).ToString());
+                            var PosY = (TextBox)this.FindName("PosY" + (i + 1).ToString());
+                            var AngZ = (TextBox)this.FindName("AngZ" + (i + 1).ToString());
+
+                            UInt16 id_69 = (BitConverter.ToUInt16(data, 2 + 14 * i - 1)); 
                             
-                            //try
-                            //{
-                                
-                            //    textBox_PosX.Text = (BitConverter.ToSingle(data, i * 14 + 3)).ToString();
-                            //    textBox_PosY.Text = (BitConverter.ToSingle(data, i * 14 + 7)).ToString();
-                            //    textBox_AngZ.Text = (BitConverter.ToSingle(data, i * 14 + 11)).ToString();
-                            //}
-                            //catch (Exception)
-                            //{
-                            //    break;
-                                
-                            //}
-                        //}
+                            if (id_69 > 255)
+                            {
+                                id_69 -= 256;
+                            }
+                                                        
+                            id.Text = id_69.ToString();
+                            PosX.Text = (BitConverter.ToSingle(data, 2 + 14 * i + 1)).ToString();
+                            PosY.Text = (BitConverter.ToSingle(data, 2 + 14 * i + 5)).ToString();
+                            AngZ.Text = (BitConverter.ToSingle(data, 2 + 14 * i + 9)).ToString();
+                        }
                     }
+
                 }
 
-                //Console.WriteLine(responseData[0] + ",  "+ ( responseData.Length ).ToString() );
+                
                 textBoxResp.Text = responseData;
-
-                //textBoxResp.Text = byte1.ToString() + byte2.ToString() + byte3.ToString();
+                Console.WriteLine(responseData.Length);
+              
 
                 
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                MessageBox.Show("serwer rozłączony");
+                MessageBox.Show(e.Message);
                 throw;
             }
             
@@ -204,13 +230,39 @@ namespace RobotyMobilne
         private void Window_KeyDown(object sender, KeyEventArgs a)
         {
             // strzałka w górę
-            if (a.Key == Key.Up)
+            if (a.Key == Key.W)
             {
+                //zwiekszyc predkosc, bo 50 to 10^-14 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-                SendCommand("001010");
+
+                float argument = 50;
+                string formatter = "{0,16:E7}{1,20}";
+                byte[] byteArray = BitConverter.GetBytes(argument);
+                Console.WriteLine(formatter, argument,
+                    BitConverter.ToString(byteArray));
+
+
+
+
+                SendCommand("5" + argument.ToString() + argument.ToString());
                 Console.WriteLine("góra");
             }
-          
+            // strzałka w dół
+            if (a.Key == Key.S)
+            {
+                Console.WriteLine("dół");
+                SendCommand("005050");
+            }
+            // strzałka w lewo
+            if (a.Key == Key.Left)
+            {
+                SendCommand("001040");
+            }
+            // strzała w prawo
+            if (a.Key == Key.Right)
+            {
+                SendCommand("001040");
+            }
         }
 
         private void btnMonitor_Click(object sender, RoutedEventArgs e)
@@ -226,6 +278,15 @@ namespace RobotyMobilne
 
             SendCommand(komenda);
         }
+
+        private void btnControl_Click(object sender,RoutedEventArgs e)
+        {
+            if (textBoxNumber.Text == "") textBoxNumber.Text = "1";
+            string komenda ="11"+textBoxNumber.Text;
+            Console.WriteLine("komenda to:{0}", komenda);
+            SendCommand(komenda);
+        }
+
 
         
 
