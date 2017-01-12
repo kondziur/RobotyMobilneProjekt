@@ -137,7 +137,7 @@ namespace RobotyMobilne
                     data[zamien] -= 48;
                 } 
 
-                Console.WriteLine(data.ToString());
+                Console.WriteLine("Data to string:{0}",data.ToString());
                 stream.Write(data, 0, data.Length);
                 String responseData = String.Empty;
 
@@ -196,7 +196,7 @@ namespace RobotyMobilne
 
                             UInt16 id_69 = (BitConverter.ToUInt16(data, 2 + 14 * i - 1)); 
                             
-                            if (id_69 > 255) //kimber pizda
+                            if (id_69 > 255)
                             {
                                 id_69 -= 256;
                             }
@@ -212,7 +212,7 @@ namespace RobotyMobilne
 
                 
                 textBoxResp.Text = responseData;
-                Console.WriteLine(responseData.Length);
+                Console.WriteLine("Długość response data:{0}",responseData.Length);
               
 
                 
@@ -235,7 +235,7 @@ namespace RobotyMobilne
                 //zwiekszyc predkosc, bo 50 to 10^-14 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
-                float argument = 50;
+                float argument = 90;
                 string formatter = "{0,16:E7}{1,20}";
                 byte[] byteArray = BitConverter.GetBytes(argument);
                 Console.WriteLine(formatter, argument,
@@ -287,6 +287,20 @@ namespace RobotyMobilne
             SendCommand(komenda);
         }
 
-    
+        private void btnEngines_Click(object sender, RoutedEventArgs e)
+        {
+            float eng1 = (float)int.Parse(Eng1.Text);
+            float eng2 = (float)int.Parse(Eng2.Text);
+            byte[] Ramka = new byte[9];
+            
+            BitConverter.GetBytes('5'-48).CopyTo(Ramka, 0);
+            BitConverter.GetBytes(eng1).CopyTo(Ramka, 1);
+            BitConverter.GetBytes(eng2).CopyTo(Ramka, 5);
+            Console.WriteLine(BitConverter.ToString(Ramka));
+            SendCommand(Ramka.ToString());
+            Console.WriteLine("ramka to string:{0}", Ramka.ToString());
+            
+        
+        }
     }
 }
