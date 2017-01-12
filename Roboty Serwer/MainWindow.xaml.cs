@@ -196,7 +196,7 @@ namespace RobotyMobilne
 
                             UInt16 id_69 = (BitConverter.ToUInt16(data, 2 + 14 * i - 1)); 
                             
-                            if (id_69 > 255)
+                            if (id_69 > 255) //kimber pizda
                             {
                                 id_69 -= 256;
                             }
@@ -287,9 +287,6 @@ namespace RobotyMobilne
             SendCommand(komenda);
         }
 
-
-        
-
-        
+    
     }
 }
