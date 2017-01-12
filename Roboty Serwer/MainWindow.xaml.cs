@@ -291,14 +291,41 @@ namespace RobotyMobilne
         {
             float eng1 = (float)int.Parse(Eng1.Text);
             float eng2 = (float)int.Parse(Eng2.Text);
-            byte[] Ramka = new byte[9];
+
+            Console.WriteLine(eng1 + eng2);
+
+            int n = int.Parse(textBoxNumber.Text);
+            byte[] Ramka = new byte[1 + 8 * n];
             
+
             BitConverter.GetBytes('5'-48).CopyTo(Ramka, 0);
-            BitConverter.GetBytes(eng1).CopyTo(Ramka, 1);
-            BitConverter.GetBytes(eng2).CopyTo(Ramka, 5);
-            Console.WriteLine(BitConverter.ToString(Ramka));
-            SendCommand(Ramka.ToString());
-            Console.WriteLine("ramka to string:{0}", Ramka.ToString());
+
+            for (int i = 0; i < n; i++)
+            {
+                BitConverter.GetBytes(eng1).CopyTo(Ramka, 1 + 8*i);
+                BitConverter.GetBytes(eng2).CopyTo(Ramka, 5 + 8*i); 
+            }
+
+            //string gowno = BitConverter.ToString(Ramka);
+            //Console.WriteLine("Ramka:{0}", gowno);
+            stream.Write(Ramka, 0, Ramka.Length);
+
+            String responseData = String.Empty;
+
+
+            
+
+
+            //odbiór ramki zwrotnej
+
+            //wyświetlanie ramki zwrotnej
+
+            
+            
+           
+
+
+           // Console.WriteLine("ramka to string:{0}", Ramka.ToString());
             
         
         }
