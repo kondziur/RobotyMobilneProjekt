@@ -8,12 +8,12 @@
         Title="Nawiązywanie Połączenia" Height="664.938" Width="906.922" ResizeMode="NoResize">
     <Grid Margin="0,0,-0.2,-19.4" KeyDown="Window_KeyDown">
         <Label x:Name="label" Content="Adres IP" HorizontalAlignment="Left" Margin="19,21,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="button" Content="Połącz" HorizontalAlignment="Left" Margin="19,110,0,0" VerticalAlignment="Top" Width="75" Click="button_Click"/>
-        <Button x:Name="button1" Content="Rozłącz" HorizontalAlignment="Left" Margin="107,110,0,0" VerticalAlignment="Top" Width="75" Click="button1_Click"/>
-        <Button x:Name="button2" Content="Wyślij" HorizontalAlignment="Left" Margin="218,110,0,0" VerticalAlignment="Top" Width="75" Click="button2_Click"/>
+        <Button x:Name="button" Content="Połącz" HorizontalAlignment="Left" Margin="19,110,0,0" VerticalAlignment="Top" Width="75" Click="btnConnect_Click"/>
+        <Button x:Name="button1" Content="Rozłącz" HorizontalAlignment="Left" Margin="107,110,0,0" VerticalAlignment="Top" Width="75" Click="btnDisconnect_Click"/>
+        <Button x:Name="button2" Content="Wyślij" HorizontalAlignment="Left" Margin="218,110,0,0" VerticalAlignment="Top" Width="75" Click="btnSend_Click"/>
         <Label x:Name="label1" Content="Komenda" HorizontalAlignment="Left" Margin="19,60,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="22" Margin="106,26,0,0" TextWrapping="Wrap" Text="192.168.2.109" VerticalAlignment="Top" Width="186"/>
-        <TextBox x:Name="textBox1" HorizontalAlignment="Left" Height="22" Margin="106,65,0,0" TextWrapping="Wrap" Text="120" VerticalAlignment="Top" Width="186"/>
+        <TextBox x:Name="textBoxIP" HorizontalAlignment="Left" Height="22" Margin="106,26,0,0" TextWrapping="Wrap" Text="192.168.2.109" VerticalAlignment="Top" Width="186"/>
+        <TextBox x:Name="textBoxCommand" HorizontalAlignment="Left" Height="22" Margin="106,65,0,0" TextWrapping="Wrap" Text="120" VerticalAlignment="Top" Width="186"/>
         <TextBox x:Name="textBoxResp" HorizontalAlignment="Left" Height="90" Margin="105,178,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="768"/>
         <Label x:Name="label2" Content="Odpowiedź:" HorizontalAlignment="Left" Height="30" Margin="19,173,0,0" VerticalAlignment="Top" Width="75"/>
         <Label x:Name="label5" Content="Port" HorizontalAlignment="Left" Margin="327,22,0,0" VerticalAlignment="Top"/>
