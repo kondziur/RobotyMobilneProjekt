@@ -48,6 +48,36 @@ namespace RobotyMobilne
         public MainWindow()
         {
             InitializeComponent();
+
+            btnDisconnect.IsEnabled = false;
+            btnSend.IsEnabled = false;
+            btnEngines.IsEnabled = false;
+            btnMonitor.IsEnabled = false;
+            btnLocation.IsEnabled = false;
+            btnControl.IsEnabled = false;
+
+            textBoxCommand.IsEnabled = false;
+            Eng1.IsEnabled = false;
+            Eng2.IsEnabled = false;
+            textBoxNumber.IsEnabled = false;
+        }
+
+        public void xorButtons()
+        {
+            btnConnect.IsEnabled = !btnConnect.IsEnabled;
+            btnDisconnect.IsEnabled = !btnDisconnect.IsEnabled;
+            btnSend.IsEnabled = !btnSend.IsEnabled;
+            btnEngines.IsEnabled = !btnEngines.IsEnabled;
+            btnMonitor.IsEnabled = !btnMonitor.IsEnabled;
+            btnLocation.IsEnabled = !btnLocation.IsEnabled;
+            btnControl.IsEnabled = !btnControl.IsEnabled;
+
+            textBoxIP.IsEnabled = !textBoxIP.IsEnabled;
+            textBoxPort.IsEnabled = !textBoxPort.IsEnabled;
+            textBoxCommand.IsEnabled = !textBoxCommand.IsEnabled;
+            Eng1.IsEnabled = !Eng1.IsEnabled;
+            Eng2.IsEnabled = !Eng2.IsEnabled;
+            textBoxNumber.IsEnabled = !textBoxNumber.IsEnabled;
         }
 
         // metoda wywoływana w metodzie "btnConnect"
@@ -70,6 +100,8 @@ namespace RobotyMobilne
         // metoda nawiązuje komunikację z serwerem poprzez utworzenie wątku, obsługującego nawiązanie połączenia
         private void btnConnect_Click(object sender, RoutedEventArgs e)
         {
+            xorButtons();
+            
             try
             {
                 // aktualizacja zmiennych przechowujących dane dotyczące adresu IP i portu
@@ -102,6 +134,8 @@ namespace RobotyMobilne
         // metoda zamykająca połączenie i resetująca pola tekstowe
         private void btnDisconnect_Click(object sender, RoutedEventArgs e)
         {
+            xorButtons();
+            
             try
             {
                 // wysłanie komendy rozłączenia
@@ -135,7 +169,7 @@ namespace RobotyMobilne
 
                 MessageBox.Show("Błąd podczas rozłączania z serwerem: " + ex.Message);
             }
-
+            
         }
 
 
@@ -375,18 +409,27 @@ namespace RobotyMobilne
                 MessageBox.Show("Błąd podczas konwersji danych: " + ex.Message);
             }
             
+            byte[] Ramka = null;
 
-            // deklaracja ramki zawierającej dane do wysłania o długości zależnej od wybranej ilości robotów 
-            int n = int.Parse(textBoxNumber.Text);
-            byte[] Ramka = new byte[1 + 8 * n];
-            
-            // zapisanie komendy sterowania ('5') oraz wartości silników do wysyłanej ramki
-            BitConverter.GetBytes('5' - 48).CopyTo(Ramka, 0);
-
-            for (int i = 0; i < n; i++)
+            try
             {
-                BitConverter.GetBytes(eng1).CopyTo(Ramka, 1 + 8*i);
-                BitConverter.GetBytes(eng2).CopyTo(Ramka, 5 + 8*i); 
+                // deklaracja ramki zawierającej dane do wysłania o długości zależnej od wybranej ilości robotów 
+                int n = int.Parse(textBoxNumber.Text);
+                Ramka = new byte[1 + 8 * n];
+            
+                // zapisanie komendy sterowania ('5') oraz wartości silników do wysyłanej ramki
+                BitConverter.GetBytes('5' - 48).CopyTo(Ramka, 0);
+
+                for (int i = 0; i < n; i++)
+                {
+                    BitConverter.GetBytes(eng1).CopyTo(Ramka, 1 + 8 * i);
+                    BitConverter.GetBytes(eng2).CopyTo(Ramka, 5 + 8 * i);
+                }
+            }
+            
+            catch (Exception ex)
+            {
+                MessageBox.Show("Błąd podczas przygotowywania ramki: " + ex.Message);
             }
 
             try

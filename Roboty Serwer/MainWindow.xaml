@@ -8,9 +8,9 @@
         Title="Nawiązywanie Połączenia" Height="664.938" Width="906.922" ResizeMode="NoResize">
     <Grid Margin="0,0,-0.2,-19.4" KeyDown="Window_KeyDown">
         <Label x:Name="label" Content="Adres IP" HorizontalAlignment="Left" Margin="19,21,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="button" Content="Połącz" HorizontalAlignment="Left" Margin="19,110,0,0" VerticalAlignment="Top" Width="75" Click="btnConnect_Click"/>
-        <Button x:Name="button1" Content="Rozłącz" HorizontalAlignment="Left" Margin="107,110,0,0" VerticalAlignment="Top" Width="75" Click="btnDisconnect_Click"/>
-        <Button x:Name="button2" Content="Wyślij" HorizontalAlignment="Left" Margin="218,110,0,0" VerticalAlignment="Top" Width="75" Click="btnSend_Click"/>
+        <Button x:Name="btnConnect" Content="Połącz" HorizontalAlignment="Left" Margin="19,110,0,0" VerticalAlignment="Top" Width="75" Click="btnConnect_Click"/>
+        <Button x:Name="btnDisconnect" Content="Rozłącz" HorizontalAlignment="Left" Margin="107,110,0,0" VerticalAlignment="Top" Width="75" Click="btnDisconnect_Click"/>
+        <Button x:Name="btnSend" Content="Wyślij" HorizontalAlignment="Left" Margin="218,110,0,0" VerticalAlignment="Top" Width="75" Click="btnSend_Click"/>
         <Label x:Name="label1" Content="Komenda" HorizontalAlignment="Left" Margin="19,60,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="textBoxIP" HorizontalAlignment="Left" Height="22" Margin="106,26,0,0" TextWrapping="Wrap" Text="192.168.2.109" VerticalAlignment="Top" Width="186"/>
         <TextBox x:Name="textBoxCommand" HorizontalAlignment="Left" Height="22" Margin="106,65,0,0" TextWrapping="Wrap" Text="120" VerticalAlignment="Top" Width="186"/>
