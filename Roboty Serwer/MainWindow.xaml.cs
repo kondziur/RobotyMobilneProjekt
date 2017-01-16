@@ -35,6 +35,9 @@ namespace RobotyMobilne
     {
         public static string ip_addr = "";
         public static int port;
+        public static string tryb = "";
+
+        public static bool wasd = false;
     }
 
 
@@ -101,7 +104,9 @@ namespace RobotyMobilne
         private void btnConnect_Click(object sender, RoutedEventArgs e)
         {
             xorButtons();
-            
+            btnEngines.IsEnabled = false;
+            btnLocation.IsEnabled = false;
+           
             try
             {
                 // aktualizacja zmiennych przechowujących dane dotyczące adresu IP i portu
@@ -135,9 +140,20 @@ namespace RobotyMobilne
         private void btnDisconnect_Click(object sender, RoutedEventArgs e)
         {
             xorButtons();
+            btnMonitor.IsEnabled = false;
+            btnControl.IsEnabled = false;
+            btnEngines.IsEnabled = false;
+            btnLocation.IsEnabled = false;
             
             try
             {
+                if (Variables.tryb == "sterowanie")
+                {
+                    SendSpeeds(0, 0);
+                    Thread.Sleep(2000);
+                }
+              
+
                 // wysłanie komendy rozłączenia
                 SendCommand("0");
 
@@ -162,8 +178,12 @@ namespace RobotyMobilne
                     PosY.Text = "";
                     AngZ.Text = "";
                 }
-                textBoxResp.Text = "rozłączono";          
+                textBoxResp.Text = "rozłączono";
+                Variables.tryb = "";
+                
+
             }
+
             catch (Exception ex)
             {
 
@@ -285,25 +305,7 @@ namespace RobotyMobilne
                 // wpisywanie danych o położeniu robotów do pól tekstowych
                 if ( responseData.Length > 3 && responseData[0] == '4' )
                 {
-                    for (int i = 0; i < 6; i++)
-                    {
-                        var id = (TextBox)this.FindName("id" + (i + 1).ToString());
-                        var PosX = (TextBox)this.FindName("PosX" + (i + 1).ToString());
-                        var PosY = (TextBox)this.FindName("PosY" + (i + 1).ToString());
-                        var AngZ = (TextBox)this.FindName("AngZ" + (i + 1).ToString());
-
-                        UInt16 idRobot = (BitConverter.ToUInt16(data, 2 + 14 * i - 1));
-
-                        if (idRobot > 255)
-                        {
-                            idRobot -= 256;
-                        }
-
-                        id.Text = idRobot.ToString();
-                        PosX.Text = (BitConverter.ToSingle(data, 2 + 14 * i + 1)).ToString();
-                        PosY.Text = (BitConverter.ToSingle(data, 2 + 14 * i + 5)).ToString();
-                        AngZ.Text = (BitConverter.ToSingle(data, 2 + 14 * i + 9)).ToString();
-                    }
+                    RozkodujRamke(data);                   
                 }
 
                 textBoxResp.Text = responseData;
@@ -318,42 +320,59 @@ namespace RobotyMobilne
                 
         }
 
-        // obsługa przycisków klawiatury
-        private void Window_KeyDown(object sender, KeyEventArgs a)
+        public void RozkodujRamke(byte[] data)
         {
-            // strzałka w górę
+            for (int i = 0; i < 6; i++)
+            {
+                var id = (TextBox)this.FindName("id" + (i + 1).ToString());
+                var PosX = (TextBox)this.FindName("PosX" + (i + 1).ToString());
+                var PosY = (TextBox)this.FindName("PosY" + (i + 1).ToString());
+                var AngZ = (TextBox)this.FindName("AngZ" + (i + 1).ToString());
+
+                UInt16 idRobot = (BitConverter.ToUInt16(data, 2 + 14 * i - 1));
+
+                if (idRobot > 255)
+                {
+                    idRobot -= 256;
+                }
+
+                id.Text = idRobot.ToString();
+                PosX.Text = (BitConverter.ToSingle(data, 2 + 14 * i + 1)).ToString();
+                PosY.Text = (BitConverter.ToSingle(data, 2 + 14 * i + 5)).ToString();
+                AngZ.Text = (BitConverter.ToSingle(data, 2 + 14 * i + 9)).ToString();
+            }
+        }
+
+        // obsługa przycisków klawiatury WASD
+        private void Window_KeyDown(object sender, KeyEventArgs a)
+        {  
+            // W
             if (a.Key == Key.W)
             {
-                //zwiekszyc predkosc, bo 50 to 10^-14 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-
-                float argument = 90;
-                string formatter = "{0,16:E7}{1,20}";
-                byte[] byteArray = BitConverter.GetBytes(argument);
-                Console.WriteLine(formatter, argument,
-                    BitConverter.ToString(byteArray));
-
-
-
-
-                SendCommand("5" + argument.ToString() + argument.ToString());
-                Console.WriteLine("góra");
+                float e1 = (float)slider_Speed.Value;
+                float e2 = e1;
+                SendSpeeds(e1, e2);
             }
-            // strzałka w dół
+            // A
+            if (a.Key == Key.A)
+            {
+                float e1 = -(float)slider_Speed.Value;
+                float e2 = -e1;
+                SendSpeeds(e1, e2);
+            }
+            // S
             if (a.Key == Key.S)
             {
-                Console.WriteLine("dół");
-                SendCommand("005050");
+                float e1 = -(float)slider_Speed.Value;
+                float e2 = e1;
+                SendSpeeds(e1, e2);
             }
-            // strzałka w lewo
-            if (a.Key == Key.Left)
+            // D
+            if (a.Key == Key.D)
             {
-                SendCommand("001040");
-            }
-            // strzała w prawo
-            if (a.Key == Key.Right)
-            {
-                SendCommand("001040");
+                float e1 = (float)slider_Speed.Value;
+                float e2 = -e1;
+                SendSpeeds(e1, e2);
             }
         }
 
@@ -361,6 +380,12 @@ namespace RobotyMobilne
         // metoda wysyła do serwera komendę wejścia w tryb monitor
         private void btnMonitor_Click(object sender, RoutedEventArgs e)
         {
+            btnControl.IsEnabled = false;
+            btnEngines.IsEnabled = false;
+            btnLocation.IsEnabled = true;
+            btnMonitor.IsEnabled = false;
+
+            Variables.tryb = "monitor";
             string komenda = "120";
             SendCommand(komenda);
         }
@@ -377,6 +402,11 @@ namespace RobotyMobilne
         // metoda wysyła do serwera komendę wejścia w tryb sterowanie
         private void btnControl_Click(object sender,RoutedEventArgs e)
         {
+            btnMonitor.IsEnabled = false;
+            btnEngines.IsEnabled = true;
+            btnLocation.IsEnabled = true;
+            btnControl.IsEnabled = false;
+            Variables.tryb = "sterowanie";
             // jeśli użytkownik nie zdefiniował liczby robotów, domyślnie ustawiana jest wartość 1
             if (textBoxNumber.Text == "")
             {
@@ -402,6 +432,7 @@ namespace RobotyMobilne
                 eng2 = (float)int.Parse(Eng2.Text);
 
                 Console.WriteLine(eng1 + eng2);
+                SendSpeeds(eng1, eng2);
             }
 
             catch (Exception ex)
@@ -409,6 +440,11 @@ namespace RobotyMobilne
                 MessageBox.Show("Błąd podczas konwersji danych: " + ex.Message);
             }
             
+            
+        }
+
+        public void SendSpeeds(float eng1, float eng2)
+        {
             byte[] Ramka = null;
 
             try
@@ -416,7 +452,7 @@ namespace RobotyMobilne
                 // deklaracja ramki zawierającej dane do wysłania o długości zależnej od wybranej ilości robotów 
                 int n = int.Parse(textBoxNumber.Text);
                 Ramka = new byte[1 + 8 * n];
-            
+
                 // zapisanie komendy sterowania ('5') oraz wartości silników do wysyłanej ramki
                 BitConverter.GetBytes('5' - 48).CopyTo(Ramka, 0);
 
@@ -426,7 +462,7 @@ namespace RobotyMobilne
                     BitConverter.GetBytes(eng2).CopyTo(Ramka, 5 + 8 * i);
                 }
             }
-            
+
             catch (Exception ex)
             {
                 MessageBox.Show("Błąd podczas przygotowywania ramki: " + ex.Message);
@@ -442,13 +478,26 @@ namespace RobotyMobilne
             {
                 MessageBox.Show("Błąd podczas wysyłania ramki: " + ex.Message);
             }
-            
+
 
             //odbiór ramki zwrotnej
             String responseData = String.Empty;
 
             //wyświetlanie ramki zwrotnej
             textBoxResp.Text = responseData;
-        }     
+        }
+
+        private void checkBox_WASD_Checked(object sender, RoutedEventArgs e)
+        {
+            Variables.wasd = true;
+        }
+
+        private void checkBox_WASD_Unchecked(object sender, RoutedEventArgs e)
+        {
+            Variables.wasd = false;
+        }
+
+
+
     }
 }
