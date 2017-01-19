@@ -345,34 +345,36 @@ namespace RobotyMobilne
 
         // obsługa przycisków klawiatury WASD
         private void Window_KeyDown(object sender, KeyEventArgs a)
-        {  
-            // W
-            if (a.Key == Key.W)
+        {
+            if (Variables.wasd == true)
             {
-                float e1 = (float)slider_Speed.Value;
-                float e2 = e1;
-                SendSpeeds(e1, e2);
-            }
-            // A
-            if (a.Key == Key.A)
-            {
-                float e1 = -(float)slider_Speed.Value;
-                float e2 = -e1;
-                SendSpeeds(e1, e2);
-            }
-            // S
-            if (a.Key == Key.S)
-            {
-                float e1 = -(float)slider_Speed.Value;
-                float e2 = e1;
-                SendSpeeds(e1, e2);
-            }
-            // D
-            if (a.Key == Key.D)
-            {
-                float e1 = (float)slider_Speed.Value;
-                float e2 = -e1;
-                SendSpeeds(e1, e2);
+                if (a.Key == Key.W)
+                {
+                    float e1 = (float)slider_Speed.Value;
+                    float e2 = e1;
+                    SendSpeeds(e1, e2);
+                }
+                // A
+                if (a.Key == Key.A)
+                {
+                    float e1 = -(float)slider_Speed.Value;
+                    float e2 = -e1;
+                    SendSpeeds(e1, e2);
+                }
+                // S
+                if (a.Key == Key.S)
+                {
+                    float e1 = -(float)slider_Speed.Value;
+                    float e2 = e1;
+                    SendSpeeds(e1, e2);
+                }
+                // D
+                if (a.Key == Key.D)
+                {
+                    float e1 = (float)slider_Speed.Value;
+                    float e2 = -e1;
+                    SendSpeeds(e1, e2);
+                }
             }
         }
 
@@ -495,6 +497,11 @@ namespace RobotyMobilne
         private void checkBox_WASD_Unchecked(object sender, RoutedEventArgs e)
         {
             Variables.wasd = false;
+        }
+
+        private void Grid_KeyUp(object sender, KeyEventArgs e)
+        {
+
         }
 
 
