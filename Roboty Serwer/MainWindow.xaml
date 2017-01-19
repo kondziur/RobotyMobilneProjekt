@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:RobotyMobilne"
         mc:Ignorable="d"
         Title="Sterowanie robotami przez serwer" Height="664.938" Width="822.922" ResizeMode="NoResize">
-    <Grid Margin="0,0,-0.2,0.2" KeyDown="Window_KeyDown">
+    <Grid Margin="0,0,-0.2,0.2" KeyDown="Window_KeyDown" KeyUp="Grid_KeyUp">
         <Label x:Name="label" Content="Adres IP" HorizontalAlignment="Left" Margin="19,21,0,0" VerticalAlignment="Top"/>
         <Button x:Name="btnConnect" Content="Połącz" HorizontalAlignment="Left" Margin="19,110,0,0" VerticalAlignment="Top" Width="75" Click="btnConnect_Click"/>
         <Button x:Name="btnDisconnect" Content="Rozłącz" HorizontalAlignment="Left" Margin="107,110,0,0" VerticalAlignment="Top" Width="75" Click="btnDisconnect_Click"/>
@@ -57,7 +57,7 @@
         <TextBox x:Name="Eng2" HorizontalAlignment="Left" Height="25" Margin="699,123,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="42" Text="-20"/>
         <Label x:Name="label3" Content="Silnik 1" HorizontalAlignment="Left" Margin="544,92,0,0" VerticalAlignment="Top"/>
         <Label x:Name="label3_Copy" Content="Silnik 2" HorizontalAlignment="Left" Margin="700,92,0,0" VerticalAlignment="Top"/>
-        <Slider x:Name="slider_Speed" HorizontalAlignment="Left" Margin="695,218,0,0" VerticalAlignment="Top" Width="116" RenderTransformOrigin="0.5,0.5" Height="20" Minimum="0" Maximum="50">
+        <Slider x:Name="slider_Speed" HorizontalAlignment="Left" Margin="695,216,0,0" VerticalAlignment="Top" Width="116" RenderTransformOrigin="0.5,0.5" Height="20" Minimum="0" Maximum="50">
             <Slider.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>

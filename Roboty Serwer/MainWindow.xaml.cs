@@ -38,6 +38,9 @@ namespace RobotyMobilne
         public static string tryb = "";
 
         public static bool wasd = false;
+    
+        
+    
     }
 
 
@@ -46,6 +49,8 @@ namespace RobotyMobilne
         // deklaracja obiektów potrzebnych do połączenia sieciowego
         TcpClient client;
         NetworkStream stream;
+
+        public static bool up, down, right, left, breakKey;
 
         // inicjalizacja okna
         public MainWindow()
@@ -346,33 +351,65 @@ namespace RobotyMobilne
         // obsługa przycisków klawiatury WASD
         private void Window_KeyDown(object sender, KeyEventArgs a)
         {
+            if (a.Key == Key.W)
+            {
+                up = true;
+            }
+
+            else if (a.Key == Key.S)
+            {
+                down = true;
+            }
+
+            else if (a.Key == Key.D)
+            {
+                right = true;
+            }
+
+            else if (a.Key == Key.A)
+            {
+                left = true;
+            }
+
+            else if (a.Key == Key.B)
+            {
+                breakKey = true;
+            }
+
             if (Variables.wasd == true)
             {
-                if (a.Key == Key.W)
+                if (up)
                 {
                     float e1 = (float)slider_Speed.Value;
                     float e2 = e1;
                     SendSpeeds(e1, e2);
                 }
                 // A
-                if (a.Key == Key.A)
+                else if (left)
                 {
                     float e1 = -(float)slider_Speed.Value;
                     float e2 = -e1;
                     SendSpeeds(e1, e2);
                 }
                 // S
-                if (a.Key == Key.S)
+                else if (down)
                 {
                     float e1 = -(float)slider_Speed.Value;
                     float e2 = e1;
                     SendSpeeds(e1, e2);
                 }
                 // D
-                if (a.Key == Key.D)
+                else if (right)
                 {
                     float e1 = (float)slider_Speed.Value;
                     float e2 = -e1;
+                    SendSpeeds(e1, e2);
+                }
+
+                else
+                {
+                    float e1 = 0;
+                    float e2 = 0;
                     SendSpeeds(e1, e2);
                 }
             }
@@ -501,7 +538,68 @@ namespace RobotyMobilne
 
         private void Grid_KeyUp(object sender, KeyEventArgs e)
         {
+            if (e.Key == Key.W)
+            {
+                up = false;
+            }
 
+            else if (e.Key == Key.S)
+            {
+                down = false;
+            }
+
+            else if (e.Key == Key.D)
+            {
+                right = false;
+            }
+
+            else if (e.Key == Key.A)
+            {
+                left = false;
+            }
+
+            else if (e.Key == Key.B)
+            {
+                breakKey = false;
+            }
+
+            if (Variables.wasd == true)
+            {
+                if (up)
+                {
+                    float e1 = (float)slider_Speed.Value;
+                    float e2 = e1;
+                    SendSpeeds(e1, e2);
+                }
+                // A
+                else if (left)
+                {
+                    float e1 = -(float)slider_Speed.Value;
+                    float e2 = -e1;
+                    SendSpeeds(e1, e2);
+                }
+                // S
+                else if (down)
+                {
+                    float e1 = -(float)slider_Speed.Value;
+                    float e2 = e1;
+                    SendSpeeds(e1, e2);
+                }
+                // D
+                else if (right)
+                {
+                    float e1 = (float)slider_Speed.Value;
+                    float e2 = -e1;
+                    SendSpeeds(e1, e2);
+                }
+
+                else
+                {
+                    float e1 = 0;
+                    float e2 = 0;
+                    SendSpeeds(e1, e2);
+                }
+            }
         }
 
 
